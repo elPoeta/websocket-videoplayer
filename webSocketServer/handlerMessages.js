@@ -1,13 +1,14 @@
 const fs = require("fs");
+const path = require('path');
 
 const handlerMessages = (clients, ws, message) =>{
   const connected = () => {
-    fs.readFile(__dirname+'/assets/movie.mp4', (err,data) => {
+    fs.readFile(path.resolve(__dirname ,'../assets/movie.mp4'), (err, data) => {
       if(err){
         console.log(`Read file error :: ${err}`);
         return;
       }
-      ws.send(data,{ binary:true });
+      ws.send(data, { binary:true });
     });
   }
 

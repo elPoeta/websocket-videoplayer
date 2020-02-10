@@ -6,7 +6,7 @@ module.exports = server =>{
   wss.on('connection', ws => {
     ws.on('message', message =>{
       console.log(`received : ${message}`);
-       handlerMessages(wss.clients,ws,message);
+       handlerMessages(wss.clients, ws, message);
     });
   });
   
