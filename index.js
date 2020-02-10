@@ -27,6 +27,8 @@ const server = http.createServer((req, res) => {
   });
 });
 
+require('./webSocketServer/wsServer')(server);
+
 server.listen(PORT , () => {
   console.log(`Listening on port : ${PORT}`);
 });
