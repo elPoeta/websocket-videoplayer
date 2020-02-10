@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: './public/src/js/index.js',
+    entry: './public/src/js/videoPlayer.js',
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname,'./public/dist')

@@ -8,16 +8,16 @@ const handlerMessages = (clients, ws, message) =>{
         console.log(`Read file error :: ${err}`);
         return;
       }
-      ws.send(data, { binary:true });
+      ws.send(data, { binary: true });
     });
   }
 
   const play = () => {
-
+    ws.send('play')
   }
 
   const pause = () => {
-    
+    ws.send('pause')
   }
 
   const broadcast = () => {
@@ -25,13 +25,13 @@ const handlerMessages = (clients, ws, message) =>{
   }
   
   const handler = {
-     'connected': connected(),
-     'play': play(),
-     'pause': pause(),
+     'connected': connected,
+     'play': play,
+     'pause': pause,
      'default': () => ws.send('invalid message')
   };
 
-  return handler[message] || handler['default'];
+  return handler[message]() || handler['default'];
 }
 
 module.exports = handlerMessages;

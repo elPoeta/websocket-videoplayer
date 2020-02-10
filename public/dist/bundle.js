@@ -90,9 +90,58 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _app_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _connection__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-new _app_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+var socket = new _connection__WEBPACK_IMPORTED_MODULE_0__["default"]();
+
+var VideoPlayer =
+/*#__PURE__*/
+function () {
+  function VideoPlayer() {
+    _classCallCheck(this, VideoPlayer);
+
+    this.videoPlayer = document.querySelector('#videoPlayer');
+    this.player = document.querySelector('.player');
+    this.toggle = this.player.querySelector('.toggle');
+    this.video = this.player.querySelector('.viewer');
+    this.toggle.addEventListener('click', this.togglePlay.bind(this));
+    this.video.addEventListener('click', this.togglePlay.bind(this));
+    this.video.addEventListener('play', this.updateButton);
+    this.video.addEventListener('pause', this.updateButton);
+  }
+
+  _createClass(VideoPlayer, [{
+    key: "loadVideo",
+    value: function loadVideo(url) {
+      this.videoPlayer.src = url;
+    }
+  }, {
+    key: "togglePlay",
+    value: function togglePlay() {
+      var method = this.video.paused ? 'play' : 'pause';
+      console.log('method ', method);
+      socket.getConnection().send(method); //const msg =  connection.getMessage();
+      //console.log('msg ',msg)
+      // this.video[method]();
+    }
+  }, {
+    key: "updateButton",
+    value: function updateButton() {
+      var icon = this.paused ? '►' : '❚ ❚';
+      console.log(icon); //this.toggle.textContent = icon;
+    }
+  }]);
+
+  return VideoPlayer;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new VideoPlayer());
 
 /***/ }),
 /* 1 */
@@ -101,53 +150,68 @@ new _app_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-//const WS_URL = location.origin.replace(/^http/, 'ws');
 
 
-var App =
+
+var Connection =
 /*#__PURE__*/
 function () {
-  function App() {
-    _classCallCheck(this, App);
+  function Connection() {
+    _classCallCheck(this, Connection);
 
     this.socket = new WebSocket(_util_js__WEBPACK_IMPORTED_MODULE_0__["WS_URL"]);
     this.openConnection = this.socket.addEventListener('open', this.openConnection.bind(this));
     this.handlerMessages = this.socket.addEventListener('message', this.handlerMessages.bind(this));
-    this.videoPlayer = document.querySelector('#videoPlayer');
   }
 
-  _createClass(App, [{
+  _createClass(Connection, [{
     key: "openConnection",
     value: function openConnection() {
       this.socket.send('connected');
       return this;
     }
   }, {
+    key: "getConnection",
+    value: function getConnection() {
+      return this.socket;
+    }
+  }, {
     key: "handlerMessages",
     value: function handlerMessages(evt) {
       var msg = {};
 
-      if (event.data instanceof Blob) {
+      if (evt.data instanceof Blob) {
         this.readFile(evt);
+      } else {
+        if (evt.data == 'play') {
+          console.log('resp fromser ', evt);
+          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[evt.data]();
+        }
+
+        if (evt.data == 'pause') {
+          console.log('resp fromser ', evt.data);
+          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[evt.data]();
+        }
       }
     }
   }, {
     key: "readFile",
     value: function readFile(fileData) {
-      this.videoPlayer.src = window.URL.createObjectURL(fileData.data);
+      _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].loadVideo(window.URL.createObjectURL(fileData.data));
     }
   }]);
 
-  return App;
+  return Connection;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (App);
+/* harmony default export */ __webpack_exports__["default"] = (Connection);
 
 /***/ }),
 /* 2 */
