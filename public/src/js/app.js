@@ -26,4 +26,4 @@ class App {
   }
 }
 
-new App();
+export default App;
