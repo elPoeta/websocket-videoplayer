@@ -1,1 +1,1 @@
-const ws = require('ws');
+const WebSocket = require('ws');
