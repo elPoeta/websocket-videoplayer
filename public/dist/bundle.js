@@ -100,13 +100,15 @@ new _app_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var WS_URL = location.origin.replace(/^http/, 'ws');
+//const WS_URL = location.origin.replace(/^http/, 'ws');
+
 
 var App =
 /*#__PURE__*/
@@ -114,7 +116,7 @@ function () {
   function App() {
     _classCallCheck(this, App);
 
-    this.socket = new WebSocket(WS_URL);
+    this.socket = new WebSocket(_util_js__WEBPACK_IMPORTED_MODULE_0__["WS_URL"]);
     this.openConnection = this.socket.addEventListener('open', this.openConnection.bind(this));
     this.handlerMessages = this.socket.addEventListener('message', this.handlerMessages.bind(this));
     this.videoPlayer = document.querySelector('#videoPlayer');
@@ -146,6 +148,16 @@ function () {
 }();
 
 /* harmony default export */ __webpack_exports__["default"] = (App);
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WS_URL", function() { return WS_URL; });
+var WS_URL = location.origin.replace(/^http/, 'ws');
+
 
 /***/ })
 /******/ ]);
