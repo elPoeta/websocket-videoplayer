@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require('path');
+const WebSocket = require('ws');
 
 const handlerMessages = (clients, ws, message) =>{
   const connected = () => {
@@ -13,15 +14,19 @@ const handlerMessages = (clients, ws, message) =>{
   }
 
   const play = () => {
-    ws.send(JSON.stringify({type:"playOk", message}));
+    broadcast({type:"playOk"});
   }
 
   const pause = () => {
-    ws.send(JSON.stringify({type:"pauseOk", message}));
+    broadcast({type:"pauseOk"});
   }
 
-  const broadcast = () => {
-
+  const broadcast = ({type}) => {
+    clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({type, message}));
+      }
+    });
   }
   
   const handler = {

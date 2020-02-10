@@ -14,8 +14,8 @@ class VideoPlayer {
     this.volume = this.player.querySelector('.player-slider');
     this.toggle.addEventListener('click', this.togglePlay.bind(this));
     this.video.addEventListener('click', this.togglePlay.bind(this));
-    this.video.addEventListener('play', this.updateButton);
-    this.video.addEventListener('pause', this.updateButton);
+    this.video.addEventListener('play', this.updateButton.bind(this));
+    this.video.addEventListener('pause', this.updateButton.bind(this));
     this.skipButtons.forEach(button => button.addEventListener('click', this.skip));
     this.volume.addEventListener('change', this.handleRangeUpdate.bind(this));
     this.mousedown = false;
@@ -32,9 +32,8 @@ class VideoPlayer {
   }
   
   updateButton() {
-    const icon = this.paused ? '►' : '❚ ❚';
-    console.log(icon);
-    //this.toggle.textContent = icon;
+    const icon = this.video.paused ? '►' : '❚ ❚';
+    this.toggle.textContent = icon;
   }
 
   skip() {

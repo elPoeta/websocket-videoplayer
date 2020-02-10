@@ -118,8 +118,8 @@ function () {
     this.volume = this.player.querySelector('.player-slider');
     this.toggle.addEventListener('click', this.togglePlay.bind(this));
     this.video.addEventListener('click', this.togglePlay.bind(this));
-    this.video.addEventListener('play', this.updateButton);
-    this.video.addEventListener('pause', this.updateButton);
+    this.video.addEventListener('play', this.updateButton.bind(this));
+    this.video.addEventListener('pause', this.updateButton.bind(this));
     this.skipButtons.forEach(function (button) {
       return button.addEventListener('click', _this.skip);
     });
@@ -141,9 +141,11 @@ function () {
     }
   }, {
     key: "updateButton",
-    value: function updateButton() {
-      var icon = this.paused ? '►' : '❚ ❚';
-      console.log(icon); //this.toggle.textContent = icon;
+    value: function updateButton(e) {
+      console.log(this.video.paused);
+      var icon = this.video.paused ? '►' : '❚ ❚';
+      console.log(icon);
+      this.toggle.textContent = icon;
     }
   }, {
     key: "skip",
@@ -160,8 +162,6 @@ function () {
       } else {
         this.video.muted = true;
       }
-
-      console.log(this.video['volume']);
     }
   }, {
     key: "handleProgress",
