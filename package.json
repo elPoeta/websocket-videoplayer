@@ -1,0 +1,26 @@
+{
+  "name": "websocket-videoplayer",
+  "version": "1.0.0",
+  "description": "websoket video player",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elPoeta/websocket-videoplayer.git"
+  },
+  "keywords": [
+    "websocket"
+  ],
+  "author": "Leonardo Tosetto (leonardo.a.tosetto@gmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/elPoeta/websocket-videoplayer/issues"
+  },
+  "homepage": "https://github.com/elPoeta/websocket-videoplayer#readme",
+  "dependencies": {
+    "mime-types": "^2.1.26",
+    "ws": "^7.2.1"
+  }
+}
