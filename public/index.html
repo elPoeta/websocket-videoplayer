@@ -7,6 +7,16 @@
   <title>Websoket Video Player</title>
 </head>
 <body>
-  test    
+  test
+  <script>
+    const WS_URL = location.origin.replace(/^http/, 'ws');
+    const ws = new WebSocket(WS_URL);
+    ws.addEventListener('open', event => {
+            ws.send('connected');
+        });
+        ws.addEventListener('message', event => {
+           console.log('from server ',event.data) 
+        })    
+  </script>
 </body>
 </html>
