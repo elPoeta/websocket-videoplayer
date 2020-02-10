@@ -1,4 +1,4 @@
-import {WS_URL} from './util.js';
+import { WS_URL, parseJsonObject } from './util.js';
 import videoPlayer from './videoPlayer.js';
 
 
@@ -24,15 +24,15 @@ class Connection {
       if(evt.data instanceof Blob){
         this.readFile(evt);
       }else {
-
-        if(evt.data == 'play'){
-          videoPlayer.video[evt.data]();
-        }
-        if(evt.data == 'pause'){
-          videoPlayer.video[evt.data]();
-        }
+        msg = parseJsonObject(evt.data);
+      if(msg.type == 'playOk'){
+        videoPlayer.video[msg.message]();
+     }
+     
+     if(msg.type == 'pauseOk'){
+        videoPlayer.video[msg.message]();
       }
-      
+    }
   }
  
   readFile(fileData) {

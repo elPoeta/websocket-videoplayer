@@ -104,16 +104,28 @@ var VideoPlayer =
 /*#__PURE__*/
 function () {
   function VideoPlayer() {
+    var _this = this;
+
     _classCallCheck(this, VideoPlayer);
 
     this.videoPlayer = document.querySelector('#videoPlayer');
     this.player = document.querySelector('.player');
+    this.progress = this.player.querySelector('.progress');
+    this.progressBar = this.player.querySelector('.progress-bar-fill');
+    this.skipButtons = this.player.querySelectorAll('[data-skip]');
     this.toggle = this.player.querySelector('.toggle');
     this.video = this.player.querySelector('.viewer');
+    this.volume = this.player.querySelector('.player-slider');
     this.toggle.addEventListener('click', this.togglePlay.bind(this));
     this.video.addEventListener('click', this.togglePlay.bind(this));
     this.video.addEventListener('play', this.updateButton);
     this.video.addEventListener('pause', this.updateButton);
+    this.skipButtons.forEach(function (button) {
+      return button.addEventListener('click', _this.skip);
+    });
+    this.volume.addEventListener('change', this.handleRangeUpdate.bind(this));
+    this.mousedown = false;
+    this.progressM();
   }
 
   _createClass(VideoPlayer, [{
@@ -125,16 +137,59 @@ function () {
     key: "togglePlay",
     value: function togglePlay() {
       var method = this.video.paused ? 'play' : 'pause';
-      console.log('method ', method);
-      socket.getConnection().send(method); //const msg =  connection.getMessage();
-      //console.log('msg ',msg)
-      // this.video[method]();
+      socket.getConnection().send(method);
     }
   }, {
     key: "updateButton",
     value: function updateButton() {
       var icon = this.paused ? '►' : '❚ ❚';
       console.log(icon); //this.toggle.textContent = icon;
+    }
+  }, {
+    key: "skip",
+    value: function skip() {
+      this.video.currentTime += parseFloat(this.dataset.skip);
+    }
+  }, {
+    key: "handleRangeUpdate",
+    value: function handleRangeUpdate(e) {
+      this.video['volume'] = e.target.value;
+
+      if (this.video['volume'] > 0) {
+        this.video.muted = false;
+      } else {
+        this.video.muted = true;
+      }
+
+      console.log(this.video['volume']);
+    }
+  }, {
+    key: "handleProgress",
+    value: function handleProgress() {
+      var percent = video.currentTime / video.duration * 100;
+      this.progressBar.style.flexBasis = "".concat(percent, "%");
+    }
+  }, {
+    key: "progressM",
+    value: function progressM() {
+      var _this2 = this;
+
+      this.progress.addEventListener('click', this.scrub);
+      this.progress.addEventListener('mousemove', function (e) {
+        return _this2.mousedown && _this2.scrub(e);
+      });
+      this.progress.addEventListener('mousedown', function () {
+        return _this2.mousedown = true;
+      });
+      this.progress.addEventListener('mouseup', function () {
+        return _this2.mousedown = false;
+      });
+    }
+  }, {
+    key: "scrub",
+    value: function scrub(e) {
+      var scrubTime = e.offsetX / progress.offsetWidth * video.duration;
+      this.video.currentTime = scrubTime;
     }
   }]);
 
@@ -190,14 +245,14 @@ function () {
       if (evt.data instanceof Blob) {
         this.readFile(evt);
       } else {
-        if (evt.data == 'play') {
-          console.log('resp fromser ', evt);
-          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[evt.data]();
+        msg = Object(_util_js__WEBPACK_IMPORTED_MODULE_0__["parseJsonObject"])(evt.data);
+
+        if (msg.type == 'playOk') {
+          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[msg.message]();
         }
 
-        if (evt.data == 'pause') {
-          console.log('resp fromser ', evt.data);
-          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[evt.data]();
+        if (msg.type == 'pauseOk') {
+          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[msg.message]();
         }
       }
     }
@@ -220,7 +275,19 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WS_URL", function() { return WS_URL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseJsonObject", function() { return parseJsonObject; });
 var WS_URL = location.origin.replace(/^http/, 'ws');
+
+var parseJsonObject = function parseJsonObject(str) {
+  try {
+    var strParsed = JSON.parse(str);
+    return strParsed;
+  } catch (error) {
+    console.log("Error :: ", error.message);
+    return {};
+  }
+};
+
 
 
 /***/ })
