@@ -120,12 +120,22 @@ function () {
     this.video.addEventListener('click', this.togglePlay.bind(this));
     this.video.addEventListener('play', this.updateButton.bind(this));
     this.video.addEventListener('pause', this.updateButton.bind(this));
+    this.video.addEventListener('timeupdate', this.handleProgress.bind(this));
     this.skipButtons.forEach(function (button) {
-      return button.addEventListener('click', _this.skip);
+      return button.addEventListener('click', _this.skip.bind(_this));
     });
     this.volume.addEventListener('change', this.handleRangeUpdate.bind(this));
     this.mousedown = false;
-    this.progressM();
+    this.progress.addEventListener('click', this.backForward.bind(this));
+    this.progress.addEventListener('mousemove', function (e) {
+      return _this.mousedown && _this.backForward(e);
+    });
+    this.progress.addEventListener('mousedown', function () {
+      return _this.mousedown = true;
+    });
+    this.progress.addEventListener('mouseup', function () {
+      return _this.mousedown = false;
+    });
   }
 
   _createClass(VideoPlayer, [{
@@ -141,16 +151,15 @@ function () {
     }
   }, {
     key: "updateButton",
-    value: function updateButton(e) {
-      console.log(this.video.paused);
+    value: function updateButton() {
       var icon = this.video.paused ? '►' : '❚ ❚';
-      console.log(icon);
       this.toggle.textContent = icon;
     }
   }, {
     key: "skip",
-    value: function skip() {
-      this.video.currentTime += parseFloat(this.dataset.skip);
+    value: function skip(e) {
+      console.log('this.video.currentTime ', this.video.currentTime);
+      this.video.currentTime += parseFloat(e.target.dataset.skip);
     }
   }, {
     key: "handleRangeUpdate",
@@ -166,30 +175,22 @@ function () {
   }, {
     key: "handleProgress",
     value: function handleProgress() {
-      var percent = video.currentTime / video.duration * 100;
+      var percent = this.video.currentTime / this.video.duration * 100;
       this.progressBar.style.flexBasis = "".concat(percent, "%");
     }
-  }, {
-    key: "progressM",
-    value: function progressM() {
-      var _this2 = this;
+    /*
+    progressM(){
+     this.progress.addEventListener('click', this.scrub);
+     this.progress.addEventListener('mousemove', (e) => this.mousedown && this.scrub(e));
+     this.progress.addEventListener('mousedown', () => this.mousedown = true);
+     this.progress.addEventListener('mouseup', () => this.mousedown = false);
+    } */
 
-      this.progress.addEventListener('click', this.scrub);
-      this.progress.addEventListener('mousemove', function (e) {
-        return _this2.mousedown && _this2.scrub(e);
-      });
-      this.progress.addEventListener('mousedown', function () {
-        return _this2.mousedown = true;
-      });
-      this.progress.addEventListener('mouseup', function () {
-        return _this2.mousedown = false;
-      });
-    }
   }, {
-    key: "scrub",
-    value: function scrub(e) {
-      var scrubTime = e.offsetX / progress.offsetWidth * video.duration;
-      this.video.currentTime = scrubTime;
+    key: "backForward",
+    value: function backForward(e) {
+      var time = e.offsetX / this.progress.offsetWidth * this.video.duration;
+      this.video.currentTime = time;
     }
   }]);
 

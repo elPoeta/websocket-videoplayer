@@ -16,10 +16,14 @@ class VideoPlayer {
     this.video.addEventListener('click', this.togglePlay.bind(this));
     this.video.addEventListener('play', this.updateButton.bind(this));
     this.video.addEventListener('pause', this.updateButton.bind(this));
-    this.skipButtons.forEach(button => button.addEventListener('click', this.skip));
+    this.video.addEventListener('timeupdate', this.handleProgress.bind(this));
+    this.skipButtons.forEach(button => button.addEventListener('click', this.skip.bind(this)));
     this.volume.addEventListener('change', this.handleRangeUpdate.bind(this));
     this.mousedown = false;
-    this.progressM();
+    this.progress.addEventListener('click', this.backForward.bind(this));
+    this.progress.addEventListener('mousemove', (e) => this.mousedown && this.backForward(e));
+    this.progress.addEventListener('mousedown', () => this.mousedown = true);
+    this.progress.addEventListener('mouseup', () => this.mousedown = false);
   }
 
   loadVideo(url){
@@ -36,8 +40,8 @@ class VideoPlayer {
     this.toggle.textContent = icon;
   }
 
-  skip() {
-    this.video.currentTime += parseFloat(this.dataset.skip);
+  skip(e) { 
+    this.video.currentTime += parseFloat(e.target.dataset.skip);
   }
    
   handleRangeUpdate(e) {  
@@ -50,19 +54,13 @@ class VideoPlayer {
    }
    
    handleProgress() {
-     const percent = (video.currentTime / video.duration) * 100;
+     const percent = (this.video.currentTime / this.video.duration) * 100;
      this.progressBar.style.flexBasis = `${percent}%`;
-     
    }
-   progressM(){
-    this.progress.addEventListener('click', this.scrub);
-    this.progress.addEventListener('mousemove', (e) => this.mousedown && this.scrub(e));
-    this.progress.addEventListener('mousedown', () => this.mousedown = true);
-    this.progress.addEventListener('mouseup', () => this.mousedown = false);
-   }
-   scrub(e) {
-     const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
-     this.video.currentTime = scrubTime;
+
+   backForward(e) {
+     const time = (e.offsetX / this.progress.offsetWidth) * this.video.duration;
+     this.video.currentTime = time;
    }
 }
 
