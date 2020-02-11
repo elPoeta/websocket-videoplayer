@@ -36,6 +36,10 @@ class Connection {
           if(type == 'skipOk'){
             videoPlayer.video.currentTime += parseFloat(message);
           }
+
+          if(type == 'backForwardOk') {
+            videoPlayer.video.currentTime = parseFloat(message);
+          }
        }
   } 
  

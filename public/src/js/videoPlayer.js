@@ -60,7 +60,8 @@ class VideoPlayer {
 
    backForward(e) {
      const time = (e.offsetX / this.progress.offsetWidth) * this.video.duration;
-     this.video.currentTime = time;
+    // this.video.currentTime = time;
+    socket.getConnection().send(JSON.stringify({typeMessage:"backForward", message: time}));
    }
 }
 

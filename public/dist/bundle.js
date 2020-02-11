@@ -186,8 +186,12 @@ function () {
   }, {
     key: "backForward",
     value: function backForward(e) {
-      var time = e.offsetX / this.progress.offsetWidth * this.video.duration;
-      this.video.currentTime = time;
+      var time = e.offsetX / this.progress.offsetWidth * this.video.duration; // this.video.currentTime = time;
+
+      socket.getConnection().send(JSON.stringify({
+        typeMessage: "backForward",
+        message: time
+      }));
     }
   }]);
 
@@ -258,6 +262,10 @@ function () {
 
         if (type == 'skipOk') {
           _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video.currentTime += parseFloat(message);
+        }
+
+        if (type == 'backForwardOk') {
+          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video.currentTime = parseFloat(message);
         }
       }
     }
