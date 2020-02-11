@@ -225,6 +225,7 @@ function () {
     this.socket = new WebSocket(_util_js__WEBPACK_IMPORTED_MODULE_0__["WS_URL"]);
     this.openConnection = this.socket.addEventListener('open', this.openConnection.bind(this));
     this.handlerMessages = this.socket.addEventListener('message', this.handlerMessages.bind(this));
+    this.error = this.socket.addEventListener('error', this.error.bind(this));
   }
 
   _createClass(Connection, [{
@@ -280,29 +281,16 @@ function () {
             console.log(message);
         }
       }
-      /*    if(type == 'playOk'){
-               videoPlayer.video[message]();
-          }
-                if(type == 'pauseOk'){
-            videoPlayer.video[message]();
-          }
-      
-          if(type == 'skipOk'){
-            videoPlayer.video.currentTime += parseFloat(message);
-          }
-           if(type == 'backForwardOk') {
-            videoPlayer.video.currentTime = parseFloat(message);
-          }
-                if(type == 'default') {
-            console.log(message);
-          }
-       }*/
-
     }
   }, {
     key: "readFile",
     value: function readFile(fileData) {
       _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].loadVideo(window.URL.createObjectURL(fileData.data));
+    }
+  }, {
+    key: "error",
+    value: function error() {
+      console.log("Error....");
     }
   }]);
 

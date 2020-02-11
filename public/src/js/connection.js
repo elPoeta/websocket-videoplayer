@@ -8,6 +8,7 @@ class Connection {
     this.socket = new WebSocket(WS_URL);
     this.openConnection = this.socket.addEventListener('open', this.openConnection.bind(this));
     this.handlerMessages = this.socket.addEventListener('message', this.handlerMessages.bind(this));   
+    this.error = this.socket.addEventListener('error', this.error.bind(this));
   }
 
   openConnection() {
@@ -48,6 +49,10 @@ class Connection {
  
   readFile(fileData) {
     videoPlayer.loadVideo(window.URL.createObjectURL(fileData.data));
+  }
+
+  error() {
+    console.log(`Error....`);
   }
 }
 

@@ -40,10 +40,7 @@ body {
   padding: 0;
   cursor: pointer;
   max-width: 50px;
-}
-
-.player-button:focus {
-  border-color: #00ff6a;
+  flex: auto;
 }
 
 .player-slider {
@@ -74,6 +71,11 @@ body {
   flex: 1;
 }
 
+.skip-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .progress {
   flex: 10;
   position: relative;
@@ -95,7 +97,7 @@ body {
 input[type=range] {
   -webkit-appearance: none;
   background: transparent;
-  width: 100%;
+  max-width: 30%;
   margin: 0 5px;
 }
 

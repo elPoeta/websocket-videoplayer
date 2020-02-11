@@ -15,8 +15,10 @@
       </div>
       <button class="player-button toggle" title="Play/Pause">►</button>
       <input type="range" name="volume" class="player-slider" min="0" max="1" step="0.05" value="0" title="Volume">
-      <button data-skip="-2" class="player-button">« 2s</button>
-      <button data-skip="4" class="player-button">4s »</button>
+      <div class="skip-buttons">
+        <button data-skip="-2" class="player-button">« 2s</button>
+        <button data-skip="4" class="player-button">4s »</button>
+      </div>
     </div>
   </div>
   <script src="./dist/bundle.js"></script>
