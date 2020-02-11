@@ -40,7 +40,7 @@ class Connection {
           if(type == 'backForwardOk') {
             videoPlayer.video.currentTime = parseFloat(message);
           }
-          
+     
           if(type == 'invalid') {
             console.log(message);
           }

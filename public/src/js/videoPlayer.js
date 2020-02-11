@@ -45,23 +45,23 @@ class VideoPlayer {
   }
    
   handleRangeUpdate(e) {  
-     this.video['volume'] = e.target.value;
-     if( this.video['volume'] > 0) {
-     this.video.muted = false;
-     } else {
-     this.video.muted = true;
-     }
-   }
-   
-   handleProgress() {
-     const percent = (this.video.currentTime / this.video.duration) * 100;
-     this.progressBar.style.flexBasis = `${percent}%`;
-   }
+    this.video['volume'] = e.target.value;
+    if( this.video['volume'] > 0) {
+      this.video.muted = false;
+    } else {
+        this.video.muted = true;
+      }
+  }
+  
+  handleProgress() {
+    const percent = (this.video.currentTime / this.video.duration) * 100;
+    this.progressBar.style.flexBasis = `${percent}%`;
+  }
 
-   backForward(e) {
-     const time = (e.offsetX / this.progress.offsetWidth) * this.video.duration;
-     socket.getConnection().send(JSON.stringify({typeMessage:"backForward", message: time}));
-   }
+  backForward(e) {
+    const time = (e.offsetX / this.progress.offsetWidth) * this.video.duration;
+    socket.getConnection().send(JSON.stringify({typeMessage:"backForward", message: time}));
+  }
 }
 
 export default new VideoPlayer();
