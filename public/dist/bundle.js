@@ -251,26 +251,53 @@ function () {
             type = _parseJsonObject.type,
             message = _parseJsonObject.message;
 
-        if (type == 'playOk') {
-          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[message]();
-        }
+        switch (type) {
+          case 'playOk':
+            {
+              _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[message]();
+              break;
+            }
 
-        if (type == 'pauseOk') {
-          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[message]();
-        }
+          case 'pauseOk':
+            {
+              _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[message]();
+              break;
+            }
 
-        if (type == 'skipOk') {
-          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video.currentTime += parseFloat(message);
-        }
+          case 'skipOk':
+            {
+              _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video.currentTime += parseFloat(message);
+              break;
+            }
 
-        if (type == 'backForwardOk') {
-          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video.currentTime = parseFloat(message);
-        }
+          case 'backForwardOk':
+            {
+              _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video.currentTime = parseFloat(message);
+              return;
+            }
 
-        if (type == 'invalid') {
-          console.log(message);
+          default:
+            console.log(message);
         }
       }
+      /*    if(type == 'playOk'){
+               videoPlayer.video[message]();
+          }
+                if(type == 'pauseOk'){
+            videoPlayer.video[message]();
+          }
+      
+          if(type == 'skipOk'){
+            videoPlayer.video.currentTime += parseFloat(message);
+          }
+           if(type == 'backForwardOk') {
+            videoPlayer.video.currentTime = parseFloat(message);
+          }
+                if(type == 'default') {
+            console.log(message);
+          }
+       }*/
+
     }
   }, {
     key: "readFile",

@@ -20,31 +20,30 @@ class Connection {
   }
 
   handlerMessages(evt) {
-    
       if(evt.data instanceof Blob){
         this.readFile(evt);
       } else {
           const  { type, message } = parseJsonObject(evt.data);
-          if(type == 'playOk'){
-            videoPlayer.video[message]();
+          switch(type) {
+            case 'playOk': {
+              videoPlayer.video[message]();
+              break;
+            } 
+            case 'pauseOk': {
+              videoPlayer.video[message]();
+              break;
+            }
+            case 'skipOk': {
+              videoPlayer.video.currentTime += parseFloat(message);
+              break;
+            }
+            case 'backForwardOk': {
+              videoPlayer.video.currentTime = parseFloat(message);
+              return;
+            }
+            default : console.log(message);
           }
-     
-          if(type == 'pauseOk'){
-            videoPlayer.video[message]();
-          }
-      
-          if(type == 'skipOk'){
-            videoPlayer.video.currentTime += parseFloat(message);
-          }
-
-          if(type == 'backForwardOk') {
-            videoPlayer.video.currentTime = parseFloat(message);
-          }
-     
-          if(type == 'invalid') {
-            console.log(message);
-          }
-       }
+        }  
   } 
  
   readFile(fileData) {

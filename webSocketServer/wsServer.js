@@ -10,8 +10,8 @@ module.exports = server =>{
       console.log(`received : ${message}`);
        handlerMessages(wss.clients, ws, msg);
     });
-    ws.on('close', message => {
-      console.log(`socket ${message} is disconnected`);
+    ws.on('close', () => {
+      console.log(`socket is disconnected`);
    });
  }); 
 }

@@ -43,7 +43,7 @@ const handlerMessages = (clients, ws, {typeMessage, message}) =>{
      'pause': pause,
      'skip': skip,
      'backForward': backForward,
-     'default': () => ws.send(JSON.stringify({type:'invalid', message:'invalid message'}))
+     'default': () => ws.send(JSON.stringify({type:'default', message:'invalid message'}))
   };
 
   return handler[typeMessage]() || handler['default'];
