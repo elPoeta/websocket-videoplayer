@@ -147,7 +147,10 @@ function () {
     key: "togglePlay",
     value: function togglePlay() {
       var method = this.video.paused ? 'play' : 'pause';
-      socket.getConnection().send(method);
+      socket.getConnection().send(JSON.stringify({
+        typeMessage: method,
+        message: method
+      }));
     }
   }, {
     key: "updateButton",
@@ -158,8 +161,10 @@ function () {
   }, {
     key: "skip",
     value: function skip(e) {
-      console.log('this.video.currentTime ', this.video.currentTime);
-      this.video.currentTime += parseFloat(e.target.dataset.skip);
+      socket.getConnection().send(JSON.stringify({
+        typeMessage: "skip",
+        message: e.target.dataset.skip
+      }));
     }
   }, {
     key: "handleRangeUpdate",
@@ -178,14 +183,6 @@ function () {
       var percent = this.video.currentTime / this.video.duration * 100;
       this.progressBar.style.flexBasis = "".concat(percent, "%");
     }
-    /*
-    progressM(){
-     this.progress.addEventListener('click', this.scrub);
-     this.progress.addEventListener('mousemove', (e) => this.mousedown && this.scrub(e));
-     this.progress.addEventListener('mousedown', () => this.mousedown = true);
-     this.progress.addEventListener('mouseup', () => this.mousedown = false);
-    } */
-
   }, {
     key: "backForward",
     value: function backForward(e) {
@@ -230,7 +227,10 @@ function () {
   _createClass(Connection, [{
     key: "openConnection",
     value: function openConnection() {
-      this.socket.send('connected');
+      this.socket.send(JSON.stringify({
+        typeMessage: 'connected',
+        message: "connected"
+      }));
       return this;
     }
   }, {
@@ -241,19 +241,23 @@ function () {
   }, {
     key: "handlerMessages",
     value: function handlerMessages(evt) {
-      var msg = {};
-
       if (evt.data instanceof Blob) {
         this.readFile(evt);
       } else {
-        msg = Object(_util_js__WEBPACK_IMPORTED_MODULE_0__["parseJsonObject"])(evt.data);
+        var _parseJsonObject = Object(_util_js__WEBPACK_IMPORTED_MODULE_0__["parseJsonObject"])(evt.data),
+            type = _parseJsonObject.type,
+            message = _parseJsonObject.message;
 
-        if (msg.type == 'playOk') {
-          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[msg.message]();
+        if (type == 'playOk') {
+          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[message]();
         }
 
-        if (msg.type == 'pauseOk') {
-          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[msg.message]();
+        if (type == 'pauseOk') {
+          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[message]();
+        }
+
+        if (type == 'skipOk') {
+          _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video.currentTime += parseFloat(message);
         }
       }
     }

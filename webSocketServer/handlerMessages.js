@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require('path');
 const WebSocket = require('ws');
 
-const handlerMessages = (clients, ws, message) =>{
+const handlerMessages = (clients, ws, {typeMessage, message}) =>{
   const connected = () => {
     fs.readFile(path.resolve(__dirname ,'../assets/video.mp4'), (err, data) => {
       if(err){
@@ -21,6 +21,12 @@ const handlerMessages = (clients, ws, message) =>{
     broadcast({type:"pauseOk"});
   }
 
+  const skip = () => {
+    broadcast({type:"skipOk"});
+  }
+  const backForward = () => {
+    broadcast({type:"backForwardOk"});
+  }
   const broadcast = ({type}) => {
     clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
@@ -33,10 +39,12 @@ const handlerMessages = (clients, ws, message) =>{
      'connected': connected,
      'play': play,
      'pause': pause,
+     'skip': skip,
+     'backForward': backForward,
      'default': () => ws.send('invalid message')
   };
 
-  return handler[message]() || handler['default'];
+  return handler[typeMessage]() || handler['default'];
 }
 
 module.exports = handlerMessages;

@@ -32,7 +32,7 @@ class VideoPlayer {
 
   togglePlay() {
     const method = this.video.paused ? 'play' : 'pause';
-    socket.getConnection().send(method);
+    socket.getConnection().send(JSON.stringify({typeMessage:method, message:method}));
   }
   
   updateButton() {
@@ -41,7 +41,7 @@ class VideoPlayer {
   }
 
   skip(e) { 
-    this.video.currentTime += parseFloat(e.target.dataset.skip);
+    socket.getConnection().send(JSON.stringify({typeMessage:"skip", message: e.target.dataset.skip}));
   }
    
   handleRangeUpdate(e) {  

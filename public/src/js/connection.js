@@ -11,7 +11,7 @@ class Connection {
   }
 
   openConnection() {
-    this.socket.send('connected'); 
+    this.socket.send(JSON.stringify({typeMessage:'connected', message:"connected"})); 
     return this;
   }
 
@@ -20,20 +20,24 @@ class Connection {
   }
 
   handlerMessages(evt) {
-    let msg = {};
+    
       if(evt.data instanceof Blob){
         this.readFile(evt);
-      }else {
-        msg = parseJsonObject(evt.data);
-      if(msg.type == 'playOk'){
-        videoPlayer.video[msg.message]();
-     }
+      } else {
+          const  { type, message } = parseJsonObject(evt.data);
+          if(type == 'playOk'){
+            videoPlayer.video[message]();
+          }
      
-     if(msg.type == 'pauseOk'){
-        videoPlayer.video[msg.message]();
-      }
-    }
-  }
+          if(type == 'pauseOk'){
+            videoPlayer.video[message]();
+          }
+      
+          if(type == 'skipOk'){
+            videoPlayer.video.currentTime += parseFloat(message);
+          }
+       }
+  } 
  
   readFile(fileData) {
     videoPlayer.loadVideo(window.URL.createObjectURL(fileData.data));
