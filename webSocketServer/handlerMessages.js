@@ -24,9 +24,11 @@ const handlerMessages = (clients, ws, {typeMessage, message}) =>{
   const skip = () => {
     broadcast({type:"skipOk"});
   }
+
   const backForward = () => {
     broadcast({type:"backForwardOk"});
   }
+
   const broadcast = ({type}) => {
     clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
@@ -41,7 +43,7 @@ const handlerMessages = (clients, ws, {typeMessage, message}) =>{
      'pause': pause,
      'skip': skip,
      'backForward': backForward,
-     'default': () => ws.send('invalid message')
+     'default': () => ws.send(JSON.stringify({type:'invalid', message:'invalid message'}))
   };
 
   return handler[typeMessage]() || handler['default'];
