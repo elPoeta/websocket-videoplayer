@@ -142,6 +142,7 @@ function () {
     key: "loadVideo",
     value: function loadVideo(url) {
       this.videoPlayer.src = url;
+      document.querySelector('.loader').style.display = 'none';
     }
   }, {
     key: "togglePlay",
