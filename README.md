@@ -50,4 +50,8 @@ http://localhost:4000
 
 The application is controlled with the play (►) and pause (❚❚) buttons, you can advance or rewind the playback in 2 ways, through the buttons of the control bar **(«2s)** go back 2 seconds **(4s »)** go forward 4 seconds, or through the progress bar by clicking on any point.
 
+## Stream version
 
+#### stream-b1 branch demo
+
+https://websocket-videoplayer-stream.herokuapp.com/
