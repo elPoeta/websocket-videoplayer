@@ -21,35 +21,31 @@ class Connection {
   }
 
   handlerMessages(evt) {
-      if(evt.data instanceof Blob){
-        this.readFile(evt);
-      } else {
-          const  { type, message } = parseJsonObject(evt.data);
-          switch(type) {
-            case 'playOk': {
-              videoPlayer.video[message]();
-              break;
-            } 
-            case 'pauseOk': {
-              videoPlayer.video[message]();
-              break;
-            }
-            case 'skipOk': {
-              videoPlayer.video.currentTime += parseFloat(message);
-              break;
-            }
-            case 'backForwardOk': {
-              videoPlayer.video.currentTime = parseFloat(message);
-              return;
-            }
-            default : console.log(message);
-          }
-        }  
+    const  { type, message } = parseJsonObject(evt.data);
+    switch(type) {
+      case 'connectedOk': {
+        console.log(message);
+        break;
+      }
+      case 'playOk': {
+        videoPlayer.video[message]();
+        break;
+     } 
+      case 'pauseOk': {
+        videoPlayer.video[message]();
+        break;
+     }
+      case 'skipOk': {
+        videoPlayer.video.currentTime += parseFloat(message);
+        break;
+      }
+      case 'backForwardOk': {
+        videoPlayer.video.currentTime = parseFloat(message);
+        return;
+      }
+      default : console.log(message);
+    }
   } 
- 
-  readFile(fileData) {
-    videoPlayer.loadVideo(window.URL.createObjectURL(fileData.data));
-  }
 
   error() {
     console.log(`Error....`);

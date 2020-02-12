@@ -91,11 +91,13 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _connection__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 var socket = new _connection__WEBPACK_IMPORTED_MODULE_0__["default"]();
@@ -140,9 +142,9 @@ function () {
 
   _createClass(VideoPlayer, [{
     key: "loadVideo",
-    value: function loadVideo(url) {
-      this.videoPlayer.src = url;
-      document.querySelector('.loader').style.display = 'none';
+    value: function loadVideo() {
+      this.videoPlayer.src = _util_js__WEBPACK_IMPORTED_MODULE_1__["VIDEO_URL"];
+      return this;
     }
   }, {
     key: "togglePlay",
@@ -198,7 +200,7 @@ function () {
   return VideoPlayer;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (new VideoPlayer());
+/* harmony default export */ __webpack_exports__["default"] = (new VideoPlayer().loadVideo());
 
 /***/ }),
 /* 1 */
@@ -246,47 +248,44 @@ function () {
   }, {
     key: "handlerMessages",
     value: function handlerMessages(evt) {
-      if (evt.data instanceof Blob) {
-        this.readFile(evt);
-      } else {
-        var _parseJsonObject = Object(_util_js__WEBPACK_IMPORTED_MODULE_0__["parseJsonObject"])(evt.data),
-            type = _parseJsonObject.type,
-            message = _parseJsonObject.message;
+      var _parseJsonObject = Object(_util_js__WEBPACK_IMPORTED_MODULE_0__["parseJsonObject"])(evt.data),
+          type = _parseJsonObject.type,
+          message = _parseJsonObject.message;
 
-        switch (type) {
-          case 'playOk':
-            {
-              _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[message]();
-              break;
-            }
-
-          case 'pauseOk':
-            {
-              _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[message]();
-              break;
-            }
-
-          case 'skipOk':
-            {
-              _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video.currentTime += parseFloat(message);
-              break;
-            }
-
-          case 'backForwardOk':
-            {
-              _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video.currentTime = parseFloat(message);
-              return;
-            }
-
-          default:
+      switch (type) {
+        case 'connectedOk':
+          {
             console.log(message);
-        }
+            break;
+          }
+
+        case 'playOk':
+          {
+            _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[message]();
+            break;
+          }
+
+        case 'pauseOk':
+          {
+            _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video[message]();
+            break;
+          }
+
+        case 'skipOk':
+          {
+            _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video.currentTime += parseFloat(message);
+            break;
+          }
+
+        case 'backForwardOk':
+          {
+            _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].video.currentTime = parseFloat(message);
+            return;
+          }
+
+        default:
+          console.log(message);
       }
-    }
-  }, {
-    key: "readFile",
-    value: function readFile(fileData) {
-      _videoPlayer_js__WEBPACK_IMPORTED_MODULE_1__["default"].loadVideo(window.URL.createObjectURL(fileData.data));
     }
   }, {
     key: "error",
@@ -307,8 +306,10 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WS_URL", function() { return WS_URL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VIDEO_URL", function() { return VIDEO_URL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseJsonObject", function() { return parseJsonObject; });
 var WS_URL = location.origin.replace(/^http/, 'ws');
+var VIDEO_URL = "".concat(location.origin, "/video");
 
 var parseJsonObject = function parseJsonObject(str) {
   try {

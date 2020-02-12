@@ -1,4 +1,5 @@
 import Connection from './connection';
+import { VIDEO_URL } from './util.js';
 const socket = new Connection();
 
 class VideoPlayer {
@@ -26,9 +27,9 @@ class VideoPlayer {
     this.progress.addEventListener('mouseup', () => this.mousedown = false);
   }
 
-  loadVideo(url){
-    this.videoPlayer.src = url;
-    document.querySelector('.loader').style.display = 'none';
+  loadVideo(){
+    this.videoPlayer.src = VIDEO_URL;
+    return this;
   }
 
   togglePlay() {
@@ -65,4 +66,4 @@ class VideoPlayer {
   }
 }
 
-export default new VideoPlayer();
+export default new VideoPlayer().loadVideo();
