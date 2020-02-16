@@ -1,4 +1,4 @@
-const WS_URL = location.origin.replace(/^http/, 'ws');
+const WS_URL = location.origin;
 const VIDEO_URL = `${location.origin}/video`;
 const parseJsonObject = str => {
   try {

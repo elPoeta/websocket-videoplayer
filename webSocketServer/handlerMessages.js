@@ -1,44 +1,21 @@
-const WebSocket = require('ws');
-
-const handlerMessages = (clients, ws, {typeMessage, message}) =>{
-  const connected = () => {
-    ws.send(JSON.stringify({type:"connectedOk", message:"You are connected"}));
-  }
-
-  const play = () => {
-    broadcast({type:"playOk"});
-  }
-
-  const pause = () => {
-    broadcast({type:"pauseOk"});
-  }
-
-  const skip = () => {
-    broadcast({type:"skipOk"});
-  }
-
-  const backForward = () => {
-    broadcast({type:"backForwardOk"});
-  }
-
-  const broadcast = ({type}) => {
-    clients.forEach(client => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({type, message}));
-      }
-    });
-  }
+const handlerMessages = (io, socket) => {
   
-  const handler = {
-     'connected': connected,
-     'play': play,
-     'pause': pause,
-     'skip': skip,
-     'backForward': backForward,
-     'default': () => ws.send(JSON.stringify({type:'default', message:'invalid message'}))
-  };
+  socket.on('play', data => {
+    io.sockets.emit('playOk',data)
+  });
 
-  return handler[typeMessage]() || handler['default'];
-}
+  socket.on('pause', data => {
+    io.sockets.emit('pauseOk',data)
+  });
+ 
+  socket.on('skip', data => {
+    io.sockets.emit('skipOk',data)
+  });
+ 
+  socket.on('backForward', data => {
+    io.sockets.emit('backForwardOk',data)
+  });
+  
+ }
 
 module.exports = handlerMessages;

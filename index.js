@@ -11,7 +11,7 @@ const server = http.createServer((req, res) => {
   if (urlPath == "") {
     urlPath = "index.html";
   }
-  console.log(`Requested path ${path} `);
+  console.log(`Requested path ${urlPath} `);
   if(urlPath != 'video') {
     let file = __dirname + "/public/" + urlPath;
     fs.readFile(file, (err, content) => {

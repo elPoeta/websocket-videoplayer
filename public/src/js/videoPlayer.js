@@ -34,7 +34,7 @@ class VideoPlayer {
 
   togglePlay() {
     const method = this.video.paused ? 'play' : 'pause';
-    socket.getConnection().send(JSON.stringify({typeMessage:method, message:method}));
+    socket.getConnection().emit(method,{ message: method });
   }
   
   updateButton() {
@@ -43,7 +43,7 @@ class VideoPlayer {
   }
 
   skip(e) { 
-    socket.getConnection().send(JSON.stringify({typeMessage:"skip", message: e.target.dataset.skip}));
+    socket.getConnection().emit("skip", {message: e.target.dataset.skip});
   }
    
   handleRangeUpdate(e) {  
@@ -62,7 +62,7 @@ class VideoPlayer {
 
   backForward(e) {
     const time = (e.offsetX / this.progress.offsetWidth) * this.video.duration;
-    socket.getConnection().send(JSON.stringify({typeMessage:"backForward", message: time}));
+    socket.getConnection().emit("backForward", {message: time});
   }
 }
 
