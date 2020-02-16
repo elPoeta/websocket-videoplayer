@@ -3,14 +3,13 @@ const path = require('path');
 const WebSocket = require('ws');
 
 const handlerMessages = (clients, ws, {typeMessage, message}) =>{
-  const connected = () => {
-    fs.readFile(path.resolve(__dirname ,'../assets/video.mp4'), (err, data) => {
-      if(err){
-        console.log(`Read file error :: ${err}`);
-        return;
-      }
-      ws.send(data, { binary: true });
-    });
+  const connected = async () => {
+    const data = await (await customReadFile(path.resolve(__dirname ,'../assets/video.mp4'))
+                             .catch(err => {
+                              console.log('Error :: ',err)
+                           }));
+                      
+    ws.send(data, { binary: true });                  
   }
 
   const play = () => {
@@ -47,6 +46,18 @@ const handlerMessages = (clients, ws, {typeMessage, message}) =>{
   };
 
   return handler[typeMessage]() || handler['default'];
+}
+
+const customReadFile = file => {
+  return new Promise((resolve, reject) =>{
+    fs.readFile(file, (err, data) => {
+      if(err){
+        console.log(`Read file error :: ${err}`);
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
 }
 
 module.exports = handlerMessages;
