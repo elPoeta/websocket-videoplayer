@@ -55,3 +55,11 @@ The application is controlled with the play (►) and pause (❚❚) buttons, yo
 #### stream-b1 branch demo
 
 https://websocket-videoplayer-stream.herokuapp.com/
+
+
+## Socket.io version
+
+#### Branch migration-to-socketio
+
+https://github.com/elPoeta/websocket-videoplayer/tree/migration-to-socketio
+
