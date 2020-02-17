@@ -4,7 +4,7 @@ const WebSocket = require('ws');
 
 const handlerMessages = (clients, ws, {typeMessage, message}) =>{
   const connected = async () => {
-    const data = await (await customReadFile(path.resolve(__dirname ,'../assets/video.mp4'))
+    const data = await (await readVideoFile(path.resolve(__dirname ,'../assets/video.mp4'))
                              .catch(err => {
                               console.log('Error :: ',err)
                            }));
@@ -48,7 +48,7 @@ const handlerMessages = (clients, ws, {typeMessage, message}) =>{
   return handler[typeMessage]() || handler['default'];
 }
 
-const customReadFile = file => {
+const readVideoFile = file => {
   return new Promise((resolve, reject) =>{
     fs.readFile(file, (err, data) => {
       if(err){
